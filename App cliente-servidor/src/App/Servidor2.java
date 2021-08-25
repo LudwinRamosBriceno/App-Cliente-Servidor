@@ -19,7 +19,7 @@ public class Servidor2 implements Runnable {
     @Override
     public void run() {
         //Host del servidor
-        final String HOST = "127.0.0.1";
+        String HOST = "127.0.0.1";
         //Puerto del servidor
         DataOutputStream out;
 
@@ -37,5 +37,8 @@ public class Servidor2 implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(Servidor2.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void addObserver(Cliente1 cliente1) {
     }
 }
