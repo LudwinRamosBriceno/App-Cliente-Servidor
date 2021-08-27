@@ -14,7 +14,7 @@ import java.net.Socket;
 
 /**
  *
- * @author lujor
+ * @author Ludwin Ramos
  */
 public class Client extends javax.swing.JFrame {
     static Socket s;
@@ -79,8 +79,18 @@ public class Client extends javax.swing.JFrame {
         });
 
         botonCalcular.setText("Calcular");
+        botonCalcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCalcularActionPerformed(evt);
+            }
+        });
 
         botonResultado.setText("Enviar resultado");
+        botonResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonResultadoActionPerformed(evt);
+            }
+        });
 
         botonEnviar.setText("Enviar");
         botonEnviar.addActionListener(new java.awt.event.ActionListener() {
@@ -176,11 +186,17 @@ public class Client extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
         String mensaje = "";
-        mensaje = textValor.getText()+"\n"+ textPeso.getText()+"\n" + textImpuesto.getText()+"\n";
-        dout.writeUTF(mensaje);
-        textValor.setText("");
-        textPeso.setText("");
-        textImpuesto.setText("");
+        int valorProducto = Integer.parseInt(textValor.getText());
+        int valorPeso = Integer.parseInt(textPeso.getText());
+        int valorImpuesto =Integer.parseInt(textImpuesto.getText());
+        if (Character.isDefined(valorProducto)&&Character.isDefined(valorPeso)&&Character.isDefined(valorImpuesto)){
+            mensaje = textValor.getText()+"\n"+ textPeso.getText()+"\n" + textImpuesto.getText()+"\n";
+            dout.writeUTF(mensaje);
+            textValor.setText("");
+            textPeso.setText("");
+            textImpuesto.setText("");
+        }
+            
         }
         catch(Exception e)
         {
@@ -188,6 +204,61 @@ public class Client extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_botonEnviarActionPerformed
+
+    private void botonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularActionPerformed
+        // TODO add your handling code here:
+        try{
+        
+        botonResultado.setEnabled(true);
+        String msj;
+        int valor = 0;
+        int peso =0;
+        int impuesto =0;
+        int[]nums = new int[3];
+        msj = textArea.getText();
+        String []valores = new String[3];
+        valores = msj.split("\n");
+        for (int i=0; i<valores.length;i++){
+            int numero = Integer.parseInt(valores[i]);
+            if (i==0){
+                valor = numero;
+            }else if (i==1){
+                peso = numero;
+            }else{
+                impuesto = numero;
+            }
+        }
+        
+        double monto = valor*impuesto/100+ peso*0.15;
+        msj = String.valueOf(monto);
+        textArea.setText(msj);
+        botonCalcular.setEnabled(false);
+        
+        }
+        catch(Exception e)
+        {
+            //handle exception here
+        }
+        
+    }//GEN-LAST:event_botonCalcularActionPerformed
+
+    private void botonResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonResultadoActionPerformed
+        // TODO add your handling code here:
+        
+        try{
+        botonCalcular.setEnabled(true);
+        String resultado = textArea.getText();
+        dout.writeUTF(resultado);
+        //jTextArea1.setText("");
+        botonResultado.setEnabled(false);
+        
+        }
+        catch(Exception e)
+        {
+            //handle exception here
+        }
+        
+    }//GEN-LAST:event_botonResultadoActionPerformed
 
     /**
      * @param args the command line arguments

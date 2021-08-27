@@ -159,11 +159,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Calcular"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCalcularActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="botonResultado">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar resultado"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonResultadoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="botonEnviar">
       <Properties>

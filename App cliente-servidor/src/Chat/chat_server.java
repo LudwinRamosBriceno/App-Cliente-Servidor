@@ -12,7 +12,7 @@ import java.net.Socket;
 
 /**
  *
- * @author lujor
+ * @author Ludwin RAMOS
  */
 public class chat_server extends javax.swing.JFrame {
 
@@ -85,6 +85,11 @@ public class chat_server extends javax.swing.JFrame {
         });
 
         botonResultado.setText("Enviar resultado");
+        botonResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonResultadoActionPerformed(evt);
+            }
+        });
 
         tituloPanel.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         tituloPanel.setText("Panel de entrada");
@@ -165,8 +170,6 @@ public class chat_server extends javax.swing.JFrame {
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
-        MainPanel.getAccessibleContext().setAccessibleParent(null);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -180,17 +183,56 @@ public class chat_server extends javax.swing.JFrame {
 
     private void botonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCalcularActionPerformed
         // TODO add your handling code here:
+        try{
+        
+        botonResultado.setEnabled(true);
+        String msj;
+        int valor = 0;
+        int peso =0;
+        int impuesto =0;
+        int[]nums = new int[3];
+        msj = jTextArea1.getText();
+        String []valores = new String[3];
+        valores = msj.split("\n");
+        for (int i=0; i<valores.length;i++){
+            int numero = Integer.parseInt(valores[i]);
+            if (i==0){
+                valor = numero;
+            }else if (i==1){
+                peso = numero;
+            }else{
+                impuesto = numero;
+            }
+        }
+        
+        double monto = valor*impuesto/100+ peso*0.15;
+        msj = String.valueOf(monto);
+        jTextArea1.setText(msj);
+        botonCalcular.setEnabled(false);
+        
+        }
+        catch(Exception e)
+        {
+            //handle exception here
+        }
+        
     }//GEN-LAST:event_botonCalcularActionPerformed
 
     private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
        
         try{
         String mensaje = "";
-        mensaje = textValor.getText()+"\n"+ textPeso.getText() +"\n"+ textImpuesto.getText()+"\n";
-        dout.writeUTF(mensaje);
-        textValor.setText("");
-        textPeso.setText("");
-        textImpuesto.setText("");
+        int valorProducto = Integer.parseInt(textValor.getText());
+        int valorPeso = Integer.parseInt(textPeso.getText());
+        int valorImpuesto =Integer.parseInt(textImpuesto.getText());
+        if (Character.isDefined(valorProducto)&&Character.isDefined(valorPeso)&&Character.isDefined(valorImpuesto)){
+            mensaje = textValor.getText()+"\n"+ textPeso.getText() +"\n"+ textImpuesto.getText()+"\n";
+            dout.writeUTF(mensaje);
+            textValor.setText("");
+            textPeso.setText("");
+            textImpuesto.setText("");
+        }
+            
         }
         catch(Exception e)
         {
@@ -198,6 +240,22 @@ public class chat_server extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_botonEnviarActionPerformed
+
+    private void botonResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonResultadoActionPerformed
+        // TODO add your handling code here:
+        try{
+        botonCalcular.setEnabled(true);
+        String resultado = jTextArea1.getText();
+        dout.writeUTF(resultado);
+        //jTextArea1.setText("");
+        botonResultado.setEnabled(false);
+        
+        }
+        catch(Exception e)
+        {
+            //handle exception here
+        }
+    }//GEN-LAST:event_botonResultadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,7 +297,7 @@ public class chat_server extends javax.swing.JFrame {
             s = ss.accept();
             dis = new DataInputStream(s.getInputStream());
             dout = new DataOutputStream(s.getOutputStream());
-            System.out.println("estoy pasando");
+            
             while (!mensaje.equals("exit")) {
                 mensaje = dis.readUTF();
                 jTextArea1.setText(mensaje);
